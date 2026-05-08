@@ -20,13 +20,13 @@ The system categorizes events into three specific threat levels based on directo
 To validate the system, three real-world threat scenarios were simulated in a controlled environment containing a sensitive_data directory and a usb_drive simulation directory.
 4.1 Standard Operations (Baseline)
 A standard text file (test.txt) was created in an unprotected directory. The system successfully calculated the baseline hash and logged the event without raising false alarms.
-•	[Insert Screenshot Here: Your terminal showing the white INFO log for the test.txt file]
+
 4.2 File Tampering (Ransomware/Insider Modification)
 A protected file (passwords.txt) within the sensitive_data directory was intentionally modified. The system detected the change, recalculated the hash, and triggered an Integrity Alert to warn of unauthorized tampering.
-•	[Insert Screenshot Here: Your terminal showing the yellow WARNING log]
+
 4.3 Data Exfiltration (Insider Threat)
 To simulate data theft, the protected passwords.txt file was dragged into the usb_drive directory. The system recognized the source-to-destination violation and instantly triggered a Critical Alert.
-•	[Insert Screenshot Here: Your terminal showing the red CRITICAL log]
+
 5. Challenges Overcome: The Infinite Log Loop
 During the initial testing phase, a recursion bug was discovered. Because the watchdog script monitors all file modifications in the directory, every time the script wrote an event to security_audit.log, the watchdog detected the log file being modified and recorded that event, triggering an infinite logging loop.
 To solve this, custom filtering logic was implemented within the on_modified event handler:
